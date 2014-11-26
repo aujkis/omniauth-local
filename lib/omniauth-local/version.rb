@@ -1,3 +1,3 @@
-module OmniauthPassword
-  VERSION = "0.0.1"
+module OmniauthLocal
+  VERSION = '0.0.1'
 end
