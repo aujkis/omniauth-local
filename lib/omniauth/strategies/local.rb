@@ -3,6 +3,7 @@ module OmniAuth
     class Local
       include OmniAuth::Strategy
 
+      option :user_model, nil
       option :login_field, :email
       option :login_transform, :to_s
 
@@ -11,12 +12,16 @@ module OmniAuth
       end
 
       def callback_phase
-        return fail!(:invalid_credentials) unless Account.try(:authenticate, password)
+        return fail!(:invalid_credentials) unless user.try(:authenticate, password)
         super
       end
 
       def user
         @user ||= user_model.send("find_by_#{options[:login_field]}", login)
+      end
+
+      def user_model
+        options[:user_model] || ::User
       end
 
       def login
