@@ -6,6 +6,34 @@ module OmniAuth
       option :model, nil
       option :identifier, :email
 
+      def model
+        options[:model] || ::Passport
+      end
+
+      def passport
+        @passport ||= model.send("find_by_#{options[:identifier]}", identifier)
+      end
+
+      def identifier
+        return '' unless request[:identity]
+        request[:identity][options[:identifier].to_s].send(:to_s)
+        # if request[:identity]
+        #   request[:identity][options[:identifier].to_s].send(:to_s)
+        # else
+        #   ''
+        # end
+      end
+
+      def password
+        return '' unless request[:identity]
+        request[:identity]['password']
+        # if request[:identity]
+        #   request[:identity]['password']
+        # else
+        #   ''
+        # end
+      end
+
       def request_phase
         redirect "/sign-in"
       end
@@ -13,30 +41,6 @@ module OmniAuth
       def callback_phase
         return fail!(:invalid_credentials) unless passport.try(:authenticate, password)
         super
-      end
-
-      def passport
-        @passport ||= model.send("find_by_#{options[:identifier]}", identifier)
-      end
-
-      def model
-        options[:model] || ::Passport
-      end
-
-      def identifier
-        if request[:identity]
-          request[:identity][options[:identifier].to_s].send(:to_s)
-        else
-          ''
-        end
-      end
-
-      def password
-        if request[:identity]
-          request[:identity]['password']
-        else
-          ''
-        end
       end
 
       uid do
