@@ -3,30 +3,29 @@ module OmniAuth
     class Local
       include OmniAuth::Strategy
 
-      option :user_model, nil
-      option :login_field, :email
-      option :login_transform, :to_s
+      option :model, nil
+      option :identifier, :email
 
       def request_phase
         redirect "/sign-in"
       end
 
       def callback_phase
-        return fail!(:invalid_credentials) unless user.try(:authenticate, password)
+        return fail!(:invalid_credentials) unless passport.try(:authenticate, password)
         super
       end
 
-      def user
-        @user ||= user_model.send("find_by_#{options[:login_field]}", login)
+      def passport
+        @passport ||= model.send("find_by_#{options[:identifier]}", identifier)
       end
 
-      def user_model
-        options[:user_model] || ::User
+      def model
+        options[:model] || ::Passport
       end
 
-      def login
+      def identifier
         if request[:identity]
-          request[:identity]['email'].send(:to_s)
+          request[:identity][options[:identifier].to_s].send(:to_s)
         else
           ''
         end
@@ -41,7 +40,7 @@ module OmniAuth
       end
 
       uid do
-        user.account_id
+        passport.account_id
       end
 
     end
