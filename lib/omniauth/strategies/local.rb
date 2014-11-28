@@ -31,7 +31,7 @@ module OmniAuth
       def callback_phase
         return fail!(:identifier_missing) if identifier == ''
         return fail!(:password_missing) if password == ''
-        return fail!(:instance_missing) unless passport.present?
+        return fail!(:record_missing) unless passport.present?
         return fail!(:invalid_credentials) unless passport.try(:authenticate, password)
         super
       end
