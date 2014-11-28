@@ -17,21 +17,11 @@ module OmniAuth
       def identifier
         return '' unless request[:identity]
         request[:identity][options[:identifier].to_s].send(:to_s)
-        # if request[:identity]
-        #   request[:identity][options[:identifier].to_s].send(:to_s)
-        # else
-        #   ''
-        # end
       end
 
       def password
         return '' unless request[:identity]
         request[:identity]['password']
-        # if request[:identity]
-        #   request[:identity]['password']
-        # else
-        #   ''
-        # end
       end
 
       def request_phase
