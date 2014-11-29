@@ -15,12 +15,12 @@ module OmniAuth
       end
 
       def identifier
-        return '' unless request[:identity]
+        return nil unless request[:identity]
         request[:identity][options[:identifier].to_s].send(:to_s)
       end
 
       def password
-        return '' unless request[:identity]
+        return nil unless request[:identity]
         request[:identity]['password']
       end
 
@@ -29,9 +29,8 @@ module OmniAuth
       end
 
       def callback_phase
-        return fail!(:identifier_missing) if identifier == ''
-        return fail!(:password_missing) if password == ''
-        return fail!(:record_missing) unless passport.present?
+        return fail!(:missing_identifier) unless identifier.present?
+        return fail!(:missing_password) unless password.present?
         return fail!(:invalid_credentials) unless passport.try(:authenticate, password)
         super
       end
