@@ -33,7 +33,7 @@ module OmniAuth
       end
 
       uid do
-        passport.provider_uid
+        account.id
       end
 
     end
