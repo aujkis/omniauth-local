@@ -3,15 +3,14 @@ module OmniAuth
     class Local
       include OmniAuth::Strategy
 
-      option :model, nil
       option :identifier, :email
 
-      def model
-        options[:model] || ::Passport
+      def account
+        @account ||= Account.send("find_by_#{options[:identifier]}", identifier)
       end
 
       def passport
-        @passport ||= model.send("find_by_#{options[:identifier]}", identifier)
+        @passport ||= Passport.send('find_by_account_id', account.id)
       end
 
       def identifier
@@ -34,7 +33,7 @@ module OmniAuth
       end
 
       uid do
-        passport.account_id
+        passport.provider_uid
       end
 
     end
