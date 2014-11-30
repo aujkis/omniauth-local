@@ -16,12 +16,12 @@ module OmniAuth
 
       def identifier
         return nil unless request[:identity]
-        request[:identity][options[:identifier].to_s].send(:to_s)
+        request[:passport][options[:identifier].to_s].send(:to_s)
       end
 
       def password
         return nil unless request[:identity]
-        request[:identity]['password']
+        request[:passport]['password']
       end
 
       def request_phase
