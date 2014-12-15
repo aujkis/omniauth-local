@@ -24,7 +24,7 @@ module OmniAuth
 
       def identifier
         return nil unless request[:passport]
-        request[:passport][options[:identifier].to_s].send(:to_s)
+        request[:passport]['account_attributes'][options[:identifier].to_s].send(:to_s)
       end
 
       def password
