@@ -19,12 +19,12 @@ module OmniAuth
       end
 
       def passport
-        @passport ||= Passport.find_by(strategy: :local, account_id: account.id)
+        @passport ||= Passport.find_by(strategy: :local, account_id: account.id) if account.present?
       end
 
       def identifier
         return nil unless request[:passport]
-        request[:passport][options[:identifier].to_s].send(:to_s)
+        request[:passport]['account_attributes'][options[:identifier].to_s].send(:to_s)
       end
 
       def password

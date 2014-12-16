@@ -1,5 +1,5 @@
 # OmniAuth Local
-Simple email and password OmniAuth strategy.
+Local OmniAuth strategy using identifier, password credentials.
 
 ---
 The MIT License
