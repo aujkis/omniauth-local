@@ -19,7 +19,7 @@ module OmniAuth
       end
 
       def passport
-        @passport ||= Passport.find_by(strategy: :local, account_id: account.id) if account.present?
+        @passport ||= Passport.find_by(provider: :local, account_id: account.id) if account.present?
       end
 
       def identifier
