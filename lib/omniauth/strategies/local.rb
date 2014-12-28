@@ -10,7 +10,7 @@ module OmniAuth
       end
 
       def callback_phase
-        return fail!(:invalid_credentials) unless passport.try(:authenticate, password)
+        return fail!(:invalid_credentials) unless identity.try(:authenticate, password)
         super
       end
 
@@ -18,8 +18,8 @@ module OmniAuth
         @account ||= Account.send("find_by_#{options[:identifier]}", identifier)
       end
 
-      def passport
-        @passport ||= Passport.find_by(provider: :local, account_id: account.id) if account.present?
+      def identity
+        @identity ||= Identity.find_by(strategy: :local, account_id: account.id) if account.present?
       end
 
       def identifier
@@ -28,12 +28,12 @@ module OmniAuth
       end
 
       def password
-        return nil unless request[:identity]['passport_attributes']
-        request[:identity]['passport_attributes']['password']
+        return nil unless request[:identity]
+        request[:identity]['password']
       end
 
       uid do
-        passport.omniauth_uid
+        identity.provider_id
       end
 
     end
