@@ -40,7 +40,7 @@ module OmniAuth
       end
 
       uid do
-        identity.uid_digest
+        identity.oauth_uid
       end
 
     end
