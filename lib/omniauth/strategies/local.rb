@@ -12,13 +12,17 @@ module OmniAuth
         super
       end
 
+      def provider
+        @provider ||= Provider.find_by(strategy: :local)
+      end
+
       def account
         @account ||= Account.find_by(email: email)
         # @account ||= Account.send("find_by_#{options[:identifier]}", identifier)
       end
 
       def identity
-        @identity ||= Identity.find_by(strategy: :local, account_id: account.id) if account.present?
+        @identity ||= Identity.find_by(provider_id: provider.id, account_id: account.id) if provider.present? and account.present?
       end
 
       def email
