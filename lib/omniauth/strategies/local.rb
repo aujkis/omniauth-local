@@ -3,13 +3,20 @@ module OmniAuth
     class Local
       include OmniAuth::Strategy
 
+      option :user_key, :email
+      option :user_secret, :password
+
       def request_phase
         redirect "/sign-in"
       end
 
       def callback_phase
-        return fail!(:invalid_credentials) unless identity.try(:authenticate, password)
+        return fail!(:invalid_credentials) unless identity.try(:authenticate, user_secret)
         super
+      end
+
+      def identity
+        @identity ||= Identity.find_by(provider_id: provider.id, account_id: account.id) if provider.present? and account.present?
       end
 
       def provider
@@ -17,27 +24,23 @@ module OmniAuth
       end
 
       def account
-        @account ||= Account.find_by(email: email)
-        # @account ||= Account.send("find_by_#{options[:identifier]}", identifier)
+        @account ||= Account.send("find_by_#{options[:user_key]}", user_key)
       end
 
-      def identity
-        @identity ||= Identity.find_by(provider_id: provider.id, account_id: account.id) if provider.present? and account.present?
-      end
-
-      def email
+      def user_key
         return nil unless request[:identity]['account_attributes']
-        request[:identity]['account_attributes']['email'].send(:to_s)
-        # request[:identity]['account_attributes'][options[:identifier].to_s].send(:to_s)
+        # request[:identity]['account_attributes']['email'].send(:to_s)
+        request[:identity]['account_attributes'][options[:user_key].to_s].send(:to_s)
       end
 
-      def password
+      def user_secret
         return nil unless request[:identity]
-        request[:identity]['password']
+        # request[:identity]['password']
+        request[:identity][options[:user_secret].to_s].send(:to_s)
       end
 
       uid do
-        identity.provider_id
+        identity.uid_digest
       end
 
     end
