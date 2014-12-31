@@ -28,14 +28,13 @@ module OmniAuth
       end
 
       def user_key
+        return nil unless request[:identity]
         return nil unless request[:identity]['account_attributes']
-        # request[:identity]['account_attributes']['email'].send(:to_s)
         request[:identity]['account_attributes'][options[:user_key].to_s].send(:to_s)
       end
 
       def user_secret
         return nil unless request[:identity]
-        # request[:identity]['password']
         request[:identity][options[:user_secret].to_s].send(:to_s)
       end
 
