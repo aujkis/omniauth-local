@@ -11,7 +11,8 @@ module OmniAuth
       end
 
       def callback_phase
-        env['omniauth.mess'] = "lolololo"
+        env['omniauth.credentials.user_key'] = user_key
+        env['omniauth.credentials.user_secret'] = user_secret
         return fail!(:invalid_credentials) unless identity.try(:authenticate, user_secret)
         super
       end
