@@ -1,4 +1,0 @@
-.gitignore
-.bundle/
-log/*.log
-pkg/
