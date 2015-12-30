@@ -15,5 +15,5 @@ Gem::Specification.new do |specification|
 
   specification.add_dependency 'rails', '>= 5.0.0.beta1'
   specification.add_runtime_dependency 'omniauth', '~> 1.3.1'
-  specification.add_runtime_dependency 'bcrypt-ruby', '~> 3.1.7'
+  specification.add_runtime_dependency 'bcrypt', '~> 3.1.7'
 end
