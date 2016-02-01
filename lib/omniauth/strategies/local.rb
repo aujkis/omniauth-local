@@ -17,11 +17,11 @@ module OmniAuth
       end
 
       def identity
-        @identity ||= Identity.find_by(strategy: 'local', account_id: account.id) if account.present?
+        @identity ||= Crossties::Identity.find_by(strategy: 'local', account_id: account.id) if account.present?
       end
 
       def account
-        @account ||= Account.send("find_by_#{options[:user_key]}", user_key)
+        @account ||= Crossties::Account.send("find_by_#{options[:user_key]}", user_key)
       end
 
       def user_key
